@@ -1,7 +1,7 @@
 import urllib.request
 import os 
 import time
-#url = 'http://jandan.net/ooxx/'
+url = 'http://jandan.net/ooxx/'
 
 #打开url地址，并得到html（未进行utf-8解码）
 def url_open(url): 
@@ -12,7 +12,7 @@ def url_open(url):
         })
     html = urllib.request.urlopen(req)
     html = html.read()
-    time.sleep(15)
+    time.sleep(3)
     return html   
 
 #获得当前网页的页号
@@ -28,16 +28,16 @@ def find_imgs(url):
     html = url_open(url).decode('utf-8')
     img_addrs = []
     
-    a = html.find('img src=')
+    a = html.find('img src="http://ww')
 
     while a != -1:
         b = html.find('.jpg',a,a +255)
         if b !=-1:
             img_addrs.append(html[a+9:b+4]) 
         else:
-            b = a +9
+            b = a+9
             
-        a = html.find('img src=',b)
+        a = html.find('img src="http://ww',b)
         
         #for each in img_addrs:
                 #dizhi_write(each)
@@ -75,5 +75,6 @@ def save_imgs(folder, img_addrs):
         with open(filename,'wb') as f:
             img =url_open(each)
             f.write(img)
-    
+
+#find_imgs()    
 download_mm()
