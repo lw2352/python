@@ -15,9 +15,9 @@ def url_open(url):
 
 def find_ip():
     html = url_open(url).decode('utf-8')
-    #type = re.search(r'"IP"{1,10}',html)
+    #type = re.search(r'(([01]{0,1}\d{0,1}\d|2[0,4]\d|25[0-5])\.){3}([01]{0,1}\d{0,1}\d|2[0-4]\d|25[0-5])',html)
     #print(type)
-    p = re.compile('(([01]{0,1}\d{0,1}\d|2[0,4]\d|25[0-5])\.){3}([01]{0,1}\d{0,1}\d|2[0-4]\d|25[0-5])')
+    p = re.compile('(([01]{0,1}\d\d|2[0,4]\d|25[0-5])\.){3}([01]{0,1}\d\d|2[0-4]\d|25[0-5])</td>')
     print(p.findall(html))
     
 
