@@ -1,7 +1,7 @@
 import urllib.request
 import os 
 import time
-url = 'http://jandan.net/ooxx/'
+#url = 'http://jandan.net/ooxx/'
 
 #打开url地址，并得到html（未进行utf-8解码）
 def url_open(url): 
@@ -52,7 +52,7 @@ def dizhi_write(dizhi):
         f.write(dizhi)
 
 #自定义要下载的页数
-def download_mm(folder='OOXX',pages=10):
+def download_mm(folder='OOXX',pages=3):
     os.mkdir(folder)
     os.chdir(folder)
     url = 'http://jandan.net/ooxx/'
@@ -76,5 +76,6 @@ def save_imgs(folder, img_addrs):
             img =url_open(each)
             f.write(img)
 
-#find_imgs()    
-download_mm()
+#find_imgs() 
+if __name__=='__main__':   
+    download_mm()
