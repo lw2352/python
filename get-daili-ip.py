@@ -1,7 +1,7 @@
 import urllib.request
 import re
 
-url = 'http://www.xicidaili.com/'
+url = 'http://www.kuaidaili.com/free/inha/'
 
 def url_open(url): 
     req=urllib.request.Request(url,headers={'Connection': 'Keep-Alive',  
@@ -22,6 +22,8 @@ def find_ip():
     
 if __name__ == '__main__':
     find_ip()
+
+
 
 
 
