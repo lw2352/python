@@ -16,12 +16,14 @@ def url_open(url):
  #获取图片的url地址，并将其写入文件
 def find_imgs():
     html = url_open(url).decode('utf-8')
-    print(html)
-    p = r'<img class="BDE_Image" src="[^"]+\.jpg">'
+    #print(html)
+    p = r'<img class="BDE_Image" src="([^"]+\.jpg)"'
     imglist = re.findall(p,html)
 
     for each in imglist:
-        print(each)
+        #print(each)
+        filename = each.split("/")[-1]
+        urllib.request.urlretrieve(each,filename,None)
 
 
 
