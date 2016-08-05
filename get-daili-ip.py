@@ -15,12 +15,28 @@ def url_open(url):
 
 def find_ip():
     html = url_open(url).decode('utf-8')
-    #type = re.search(r'"IP"{1,10}',html)
-    #print(type)
-    p = r'(?:(?:[01]?\d?\d| 2[0,4]\d| 25[0-5])\.){3}(?:[01]?\d?\d| 2[0-4]\d| 25[0-5])'
-    iplist = re.findall(p, html)
+
+
+    port = r'<td data-title="PORT">([^"]+\d)</td>'
+    portlist = re.findall(port,html)
+    for each in portlist:
+        print(each)
+        #dizhi_write(each)
+        #dizhi_write(',')
+
+    #dizhi_write('\n')
+
+    ip = r'<td data-title="IP">([^"]+\d)</td>'
+    iplist = re.findall(ip,html) 
     for each in iplist:
         print(each)
+        #dizhi_write(each)
+        #dizhi_write(',')
+        
+#写入文件操作
+def dizhi_write(dizhi): 
+    with open('img_addrs.txt','a') as f:
+        f.write(dizhi)
 
 if __name__ == '__main__':
     find_ip()
