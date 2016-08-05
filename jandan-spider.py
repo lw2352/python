@@ -55,6 +55,7 @@ def dizhi_write(dizhi):
 def download_mm(folder='OOXX',pages=3):
     os.mkdir(folder)
     os.chdir(folder)
+    folder_top = os.getcwd()  #获取当前工作目录
     url = 'http://jandan.net/ooxx/'
     page_num = int(get_page(url))
 
@@ -62,20 +63,28 @@ def download_mm(folder='OOXX',pages=3):
         page_num -= i
         page_url = url + 'page-' + str(page_num) + '#comments'
         img_addrs = find_imgs(page_url)
-        save_imgs(folder,img_addrs)
+        save_imgs(folder,img_addrs,page_num)
+        os.chdir(folder_top)
         for each in img_addrs:
             dizhi_write(each)
             dizhi_write('\n')
             print (each)
 
 #通过图片的url地址来下载图片
-def save_imgs(folder, img_addrs):
+def save_imgs(folder, img_addrs,page_num):
+    os.mkdir(str(page_num))
+    os.chdir(str(page_num))
+
     for each in img_addrs:
         filename = each.split('/')[-1]
+        img =url_open(each)
         with open(filename,'wb') as f:
-            img =url_open(each)
             f.write(img)
+            f.close()
 
 #find_imgs() 
 if __name__=='__main__':   
-    download_mm()
+    #download_mm()
+    folder = input("Please enter a folder(default is 'ooxx'): " )
+    pages = input("How many pages do you wan to download(default is 10): ")
+    download_mm(str(folder),int(pages))
