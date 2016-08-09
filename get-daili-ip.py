@@ -1,7 +1,6 @@
 import urllib.request
 import re
 
-url = 'http://www.kuaidaili.com/free/inha/'
 
 def url_open(url): 
     req=urllib.request.Request(url,headers={'Connection': 'Keep-Alive',  
@@ -13,75 +12,53 @@ def url_open(url):
     html = html.read()
     return html
 
-def find_ip():
+def find_ip(url):
     html = url_open(url).decode('utf-8')
+    myip = url_open('http://whatismyip.com.tw').decode('utf-8')
+    print(myip)
 
-
-    port = r'<td data-title="PORT">([^"]+\d)</td>'
-    portlist = re.findall(port,html)
-    for each in portlist:
-        print(each)
+    #port = r'<td data-title="PORT">([^"]+\d)</td>'
+    #portlist = re.findall(port,html)
+    #for each in portlist:
+        #print(each)
         #dizhi_write(each)
         #dizhi_write(',')
 
     #dizhi_write('\n')
 
     ip = r'<td data-title="IP">([^"]+\d)</td>'
-    iplist = re.findall(ip,html) 
-    for each in iplist:
+    iplist1 = re.findall(ip,html) 
+    for each in iplist1:
         print(each)
+    return iplist1
         #dizhi_write(each)
         #dizhi_write(',')
+
+#获取N个页面上的ip
+def get_ip():
+    i =1
+    iplist2 = []
+    url = 'http://www.kuaidaili.com/free/inha/'
+    while(i<=5):
+        page_url = url+str(i)+'/'
+        iplist2 += find_ip(page_url)  #将所有获取的ip放入列表iplist2中
+        print(i)
+        i += 1
+
+    print(iplist2)
+        #dizhi_write('\n')
+        
+             
         
 #写入文件操作
-def dizhi_write(dizhi): 
-    with open('img_addrs.txt','a') as f:
+def file_write(dizhi): 
+    with open('img_addrs.csv','a') as f:
         f.write(dizhi)
 
 if __name__ == '__main__':
-    find_ip()
+    get_ip()
 
 
-'''
-import requests as req
-import re
-import pprint as pp
-
-heads={
-    'Accept':'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-    'Accept-Encoding':'gzip,deflate,sdch',
-    'Accept-Language':'zh-CN,zh;q=0.8',
-    'Cache-Control':'max-age=0',
-    'Connection':'keep-alive',
-    'Host':'www.kuaidaili.com',
-    'User-Agent':'Mozilla/5.0 (Windows NT 5.1)'
-}
-ssn = req.Session()
-ssn.headers = heads
-
-ptn表=re.compile(r'<div[^>]*?id="list".*?'
-                r'(<table[^>]*>.*?</table>)',
-                re.X|re.S)
-ptn行=re.compile(r'<tr[^>]*>.*?</tr>',re.S)
-ptn格=re.compile(r'<td[^>]*>(.*?)</td>',re.S)
-
-url = "http://www.kuaidaili.com/free/inha/"
-Proxys=[['IP','PORT','类型','响应速度','最后验证时间']]
-for i in range(1,6): # 抓取 5 页
-    rsp = ssn.get(url+str(i))
-    rsp.encodeing='utf-8'
-    html = rsp.text
-    表=ptn表.findall(html)
-    行=ptn行.findall(表[0])
-    for td in 行[1:] :
-        td=ptn格.findall(td)
-        td.pop(4)
-        td.pop(2)
-        Proxys.append(td)
-    
-pp.pprint(Proxys)
-input('暂停')
-'''
 
 
 
