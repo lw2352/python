@@ -1,7 +1,6 @@
 import urllib.request
 import re
 
-#默认网址:http://www.igxe.cn/productlist-17?page_no=2&sort_key=1&sort_rule=1
 
 def url_open(url):
     req=urllib.request.Request(url,headers={'Connection': 'Keep-Alive',  
@@ -14,45 +13,47 @@ def url_open(url):
     return html
 
 def find_info(url):
-    i=0 
+    i=0
+    j=0
     html = url_open(url).decode('utf-8')
+
+    #1找出物品的sale_id
+    sale_id=r'<i sale_id="([\d]+\d)'
+    sale_id_list=re.findall(sale_id,html)
+    print('$sale_id$')
+    for each in sale_id_list:
+        print(each)
     
-#找出物品名称
+    #2找出物品名称
     name=r'<h3 class="h3" style="color:#\S\S\S\S\S\S">([^"]+\s)</h3>'
     name_list=re.findall(name,html)   #name_list是以列表
     print('$物品名称$')
     for each in name_list:
         print(each)
 
-#找出物品磨损级别
+    #3找出物品磨损级别
     exterior=r'<b>(\w\w\w\w)\s'
     exterior_list=re.findall(exterior,html)
     print('$磨损级别$')
     for each in exterior_list:
         print(each)
 
-#找出物品磨损值
+    #4找出物品磨损值
     exterior_num=r'<span>\w\w\w:\s+([^"]+\d)'
     exterior_num_list=re.findall(exterior_num,html)
     print('$磨损值$')
     for each in exterior_num_list:
         print(each)
 
-#找出物品的sale_id
-    sale_id=r'<i sale_id="([\d]+\d)'
-    sale_id_list=re.findall(sale_id,html)
-    print('$sale_id$')
-    for each in sale_id_list:
-        print(each)
 
-#找出物品市场均价
+    #5找出物品市场均价
     market_price=r'<span>\w\w\w\w: <b>([^"]+\d)</b>'
     market_price_list=re.findall(market_price,html)
     print('$市场均价$')
     for each in market_price_list:
         print(each)
     
-#找出物品current价
+    #6找出物品current价
     current_price=r'\w\w\w\w: <strong>([^"]+\d)</strong>'
     current_price_list=re.findall(current_price,html)
     print('$current价$')
@@ -60,7 +61,7 @@ def find_info(url):
         print(each)
 
     
-#找出物品价格比例
+    #7找出物品价格比例
     print('$比例$')
     rate_list=[]
     while(i<12):
@@ -72,17 +73,39 @@ def find_info(url):
         i+=1
         print(rate)
     #print(rate_list)
+
+    while(j<12):
+        file_write(sale_id_list[j])
+        file_write(',')
+        #file_write(name_list[j])
+        #file_write(',')
+        file_write(exterior_list[j])
+        file_write(',')
+        file_write(exterior_num_list[j])
+        file_write(',')
+        file_write(market_price_list[j])
+        file_write(',')
+        file_write(current_price_list[j])
+        file_write(',')
+        file_write(str(rate_list[j]))
+        file_write('\n')
+        j += 1
+    
         
  #找出N个页面上的信息
 def get_info(name_id,pages,money_start,money_end,sort_key,sort_rule):
     j = 1
+
+    file_write('sale_id,exterior,exterior_num,market_price,current_price,rate')
+    file_write('\n')
+
     while(j<=pages): 
         print(j)
         url = 'http://www.igxe.cn/'+'productlist-'+name_id+'?page_no='+str(j)+'&money_start='+money_start+'&money_end'+money_end+'&sort_key='+sort_key+'&sort_rule='+sort_rule
         print(url)
-        find_info(url)  
+        find_info(url)
+        file_write('\n')
         j += 1
-
 
 #写入文件操作
 def file_write(dizhi): 
@@ -106,4 +129,8 @@ if __name__ == '__main__':
           从高到低 2,1
 时间：从新到旧 1,1
           从旧到新 1,0
+
+商品链接例子：http://www.igxe.cn/product-3280137
+默认网址:http://www.igxe.cn/productlist-17?page_no=2&sort_key=1&sort_rule=1
+
 '''
